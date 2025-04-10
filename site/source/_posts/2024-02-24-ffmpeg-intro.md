@@ -83,13 +83,27 @@ tags: [ffmpeg, ffplay]
 - 使用txt文件集合concat合并，视频合并使用这个list合并方式
 
   ```shell
-  # 将两个 flv 文件合并
-  ffmpeg -f concat -i videolist.txt -c copy output.flv
-  ffmpeg -f concat -safe 0 -i list.txt -c copy output-he.mp4
+  # 将两个 mp4 文件合并
+  ffmpeg -f concat -i input.txt -c copy output.mp4
+  ffmpeg -f concat -safe 0 -i input.txt -c copy output-he.mp4
   
   ## input.txt 中的内容
-  file 'xj1.flv'
-  file 'xj2.flv'
+  file 'file1.mp4'
+  file 'file2.mp4'
+  ```
+
+- contact 添加一段空白
+  - 添加静音空白
+  如果你想要在视频的末尾添加一段静音，可以使用apad滤镜。例如，如果你想在视频末尾添加5秒的静音：
+  ``` shell
+  ffmpeg -i input.mp4 -filter_complex "[0:a]apad=pad_dur=5[aout]" -map 0:v -map "[aout]" -c:v copy output.mp4
+  # 这里，apad=pad_dur=5会在音频末尾添加5秒的静音。
+  ```
+  - 添加黑屏空白
+如果你想要在视频的末尾添加一段黑屏，可以使用loop滤镜来复制最后一帧，然后延长视频时长。例如，添加5秒的黑屏：
+  ``` shell
+  ffmpeg -i input.mp4 -filter:v "loop=loop=-1:size=1:start=0" -t 5 -c:a copy output.mp4
+  # 这里，loop=loop=-1:size=1:start=0会复制视频的最后一帧并无限循环这个帧，然后使用-t 5来指定输出视频的总时长为5秒（包括原始视频长度和额外的5秒黑屏）。
   ```
 
 ### 2.3 淡出效果
@@ -239,13 +253,14 @@ ffmpeg -i "mine.mkv" -filter_complex "asetrate=48000*2^(-2/12),atempo=1/2^(-2/12
 改变音频速率最简单的方法是直接调整音频的采样率，但是与此同时，这种方法会改变音频的音色。目前一般采用对原音进行重采样，差值等方法来实现。下面这行命令的倍率调整范围为0.5到2。
 
 ```shell
-ffmpeg -i input.mkv -filter:a "atempo=2.0" -vn output.mkv
+# 提高速度是原来的2倍
+ffmpeg -i input.mp3 -filter:a "atempo=2.0" -vn output.mp3
 ```
 
 如果想要再快的话，需要更改命令，通过将多个atempo过滤器串接在一起来绕过这个限制。
 
 ```shell
-ffmpeg -i input.mkv -filter:a "atempo=2.0,atempo=2.0" -vn output.mkv
+ffmpeg -i input.mp3 -filter:a "atempo=2.0,atempo=2.0" -vn output.mp3
 ```
 
 将对输入文件 test_cut.mp3 应用音频效果，包括加速 2 倍(atempo)、高通滤波器(highpass)和低通滤波器(lowpass)，并保存为 test_cut_ahl.mp3
@@ -253,6 +268,29 @@ ffmpeg -i input.mkv -filter:a "atempo=2.0,atempo=2.0" -vn output.mkv
 ```shell
 ffmpeg -i test_cut.mp3 -af "atempo=2.0, highpass=f=200, lowpass=f=3000" test_cut_ahl.mp3
 ```
+
+通过调整音频的采样率（-ar）和音高（asetrate），也可以实现音频的减速效果。
+
+```shell
+# 将音频速度放慢到 50%
+ffmpeg -i input.mp3 -af "asetrate=44100*0.5,aresample=44100" output.mp3
+```
+
+#### 参数说明
+- asetrate=44100*0.5：将采样率调整为原来的 50%。
+- aresample=44100：将采样率重新调整为 44100 Hz，以保持音质。
+
+如果你希望放慢音频速度的同时保持音高不变，可以使用 rubberband 滤镜（需要安装 librubberband）。
+
+```
+# 将音频速度放慢到 50% 并保持音高
+ffmpeg -i input.mp3 -af "rubberband=tempo=0.5" output.mp3
+```
+
+#### 安装 librubberband：
+- macOS: brew install rubberband
+- Linux: sudo apt install rubberband-cli
+- Windows: 需要手动编译或使用预编译版本。
 
 ### 4.4 视频速率调整
 
