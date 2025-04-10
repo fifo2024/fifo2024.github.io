@@ -39,6 +39,10 @@ tags: [audio, shnsplit, cue, ape, wav, flac]
 
   - 首先使用ffmpeg将ape转为wav，然后使用上面方法切割
 
+  ``` shell
+  ffmpeg -i input.ape output.wav
+  ```
+
 ## 推荐
 
 - [FFmpeg](https://github.com/FFmpeg/FFmpeg)
