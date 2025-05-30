@@ -30,7 +30,7 @@ export default defineConfig({
     ],
     socialLinks: [
       { icon: 'github', mode: 'link', content: 'https://github.com/fifo2024/' },
-      { icon: 'twitter', mode: 'link', content: 'https://twitter.com/' },
+      { icon: 'x', mode: 'link', content: 'https://x.com/' },
     ],
     // 关闭所有页面的左侧菜单栏
     sidebar: {},
