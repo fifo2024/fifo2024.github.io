@@ -8,8 +8,8 @@ import { markdownPresetsPlugin } from '@fifo/rspress-plugin-markdown-presets'
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
-  title: '知否知否',
-  description: '知否 Blog',
+  title: '知否2024',
+  description: '知否2024 Blog',
   icon: '/favicon.ico',
   outDir: '../docs',
   builderConfig: {
@@ -24,12 +24,12 @@ export default defineConfig({
   themeConfig: {
     friendLinks: [
       {
-        name: '知否知否',
-        link: 'https://github.com/zhifou',
+        name: '知否2024',
+        link: 'https://github.com/fifo2024',
       },
     ],
     socialLinks: [
-      { icon: 'github', mode: 'link', content: 'https://github.com/zhifou/' },
+      { icon: 'github', mode: 'link', content: 'https://github.com/fifo2024/' },
       { icon: 'twitter', mode: 'link', content: 'https://twitter.com/' },
     ],
     // 关闭所有页面的左侧菜单栏
@@ -75,7 +75,7 @@ export default defineConfig({
     editLink: {
       text: '📝 在 GitHub 上编辑此页',
       docRepoBaseUrl:
-        'https://github.com/zhifou/zhifou.github.io/tree/main/site/source/',
+        'https://github.com/fifo2024/fifo2024.github.io/tree/main/site/source/',
     },
     searchPlaceholderText: '搜索...',
   },
