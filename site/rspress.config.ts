@@ -37,11 +37,6 @@ export default defineConfig({
     // 顶部导航栏
     nav: [
       {
-        text: '未来指引',
-        link: '/guide/',
-        activeMatch: '/guide/',
-      },
-      {
         text: '友情链接',
         link: '/blog/flinks/',
         activeMatch: '/blog/flinks/',
